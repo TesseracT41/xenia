@@ -79,7 +79,9 @@ filter("configurations:Release")
     "NDEBUG",
     "_NO_DEBUG_HEAP=1",
   })
-  optimize("On")
+  optimize("speed")
+  inlining("Auto")
+  floatingpoint("Fast")
   flags({
     "LinkTimeOptimization",
   })
@@ -88,6 +90,9 @@ filter({"configurations:Release", "platforms:Windows"})
   linkoptions({
     "/NODEFAULTLIB:MSVCRTD",
   })
+  buildoptions({
+    "/GT", -- enable fiber-safe optimizations
+   })
 
 filter("platforms:Linux")
   system("linux")
@@ -206,9 +211,6 @@ if not os.isdir("scratch") then
   flags_file:write("#--flush_stdout=false\n")
   flags_file:write("\n")
   flags_file:write("#--vsync=false\n")
-  flags_file:write("#--gl_debug\n")
-  flags_file:write("#--gl_debug_output\n")
-  flags_file:write("#--gl_debug_output_synchronous\n")
   flags_file:write("#--trace_gpu_prefix=scratch/gpu/gpu_trace_\n")
   flags_file:write("#--trace_gpu_stream\n")
   flags_file:write("#--disable_framebuffer_readback\n")
